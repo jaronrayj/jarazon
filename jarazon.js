@@ -13,7 +13,7 @@ var connection = mysql.createConnection({
 
   // Your password
   password: "rootroot",
-  database: "jarazonDB"
+  database: "jarazon_db"
 });
 
 connection.connect(function(err) {
@@ -31,3 +31,4 @@ var logo =
 --                                                                                      `;
 
 console.log(logo);
+
