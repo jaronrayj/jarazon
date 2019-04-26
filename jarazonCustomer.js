@@ -49,7 +49,7 @@ function showProducts(fn) {
       console.log(
         `
       ${res[i].id} Item: ${res[i].item} 
-      Dept: ${res[i].department_name} 
+      Price: $${res[i].price} 
       Quantity: ${res[i].quantity}`);
 
     }
@@ -92,9 +92,13 @@ function buy() {
 
     inquirer.prompt([{
         message: "What number would you like to buy?",
-        input: "list",
+        type: "rawlist",
         choices: function () {
-          
+          var choiceArray = [];
+          for (var i = 0; i < results.length; i++) {
+            choiceArray.push(results[i].id);
+          }
+          return choiceArray;
         },
         name: "item"
       },
@@ -105,7 +109,42 @@ function buy() {
       }
 
     ]).then(function (res) {
-
+      var arrayItem = res.item - 1;
+      if (results[arrayItem].quantity >= res.quantity) {
+        var remainder = results[arrayItem].quantity - res.quantity;
+        confirmPrice(results[arrayItem].price, res.quantity, res.item, remainder, results[arrayItem].item.toLowerCase());
+      } else {
+        console.log("I'm sorry, I don't have that much in stock, try again");
+        buy();
+      }
     });
+  });
+}
+
+function confirmPrice(price, quantity, id, remainder, productName) {
+  inquirer.prompt([{
+    message: `That is going to cost $${price * quantity}, is that alright?`,
+    type: "confirm",
+    name: "confirm"
+  }]).then(function (res) {
+    if (res.confirm) {
+      console.log(`Thanks for buying my junk! Enjoy your ${productName}`);
+      connection.query("UPDATE products SET ? WHERE ?",
+        [{
+            quantity: remainder
+          },
+          {
+            id: id
+          }
+        ],
+        function (err, results) {
+          if (err) throw err;
+        }
+      );
+      intialPrompt();
+    } else {
+      console.log("Let's try again!");
+      intialPrompt();
+    }
   });
 }

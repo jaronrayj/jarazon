@@ -14,6 +14,6 @@ VALUES
     ( "Ladder (actually a bucket)", 5, "Garage Stuff", 12),
     ( "Mostly fresh underwear", 20, "Personal Household Goods", 15),
     ( "Tony's jeans", 60, "Acquired Items", 3),
-    ( "Neighbor's Barbies", .5, "Acquired Items", 5);
+    ( "Neighbor's Barbies", .50, "Acquired Items", 5);
 
 select * from products;
