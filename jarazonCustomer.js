@@ -19,7 +19,7 @@ var connection = mysql.createConnection({
 connection.connect(function (err) {
   if (err) throw err;
   // console.log("connected as id " + connection.threadId);
-  showProducts(intialPrompt);
+  intialPrompt();
 });
 
 var welcome =
@@ -54,7 +54,7 @@ function showProducts(fn) {
 
     }
     console.log(`     ----------------------------------`);
-    fn()
+    fn();
   });
 }
 
@@ -63,12 +63,16 @@ function intialPrompt() {
   inquirer.prompt([{
     message: "What would you like to do?",
     type: "list",
-    choices: ["Buy my stuff", "Add an item"],
+    choices: ["See what I got", "Buy my stuff", "Add an item"],
     name: "option"
   }]).then(function (res) {
     switch (res.option) {
       case "Buy my stuff":
         showProducts(buy);
+        break;
+
+      case "See what I got":
+        showProducts(intialPrompt);
         break;
 
       case "Add an item":
@@ -83,5 +87,25 @@ function intialPrompt() {
 
 // * Will ask which item to purchase
 function buy() {
-  inquirer.prompt
+  connection.query("SELECT * FROM products", function (err, results) {
+    if (err) throw err;
+
+    inquirer.prompt([{
+        message: "What number would you like to buy?",
+        input: "list",
+        choices: function () {
+          
+        },
+        name: "item"
+      },
+      {
+        message: "How many would you like to purchase?",
+        name: "quantity",
+        input: "number"
+      }
+
+    ]).then(function (res) {
+
+    });
+  });
 }
