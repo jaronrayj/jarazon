@@ -63,7 +63,7 @@ function intialPrompt() {
   inquirer.prompt([{
     message: "What would you like to do?",
     type: "list",
-    choices: ["See what I got", "Buy my stuff", "Add an item"],
+    choices: ["See what I got", "Buy my stuff", "Add an item", "I don't want this junk"],
     name: "option"
   }]).then(function (res) {
     switch (res.option) {
@@ -76,7 +76,13 @@ function intialPrompt() {
         break;
 
       case "Add an item":
+        addItem();
+        break;
 
+      case "I don't want this junk":
+        console.log(`Thanks for shopping with us!
+      ${logo}`);
+        connection.end();
         break;
 
       default:
@@ -147,4 +153,48 @@ function confirmPrice(price, quantity, id, remainder, productName) {
       intialPrompt();
     }
   });
+}
+
+function addItem() {
+  inquirer.prompt([{
+      message: `What item would you like to add to jarazon?`,
+      name: `item`,
+      type: `input`
+    },
+    {
+      message: `What price would you like to set it at?`,
+      name: `price`,
+      type: `number`
+    },
+    {
+      message: `How many do you have to sell?`,
+      name: `quantity`,
+      type: `number`
+    },
+    {
+      message: `What department does it best fit under?`,
+      name: `dept`,
+      choices: ['Personal Household Goods', `Garage Stuff`, `Acquired Items`],
+      type: `list`
+    }
+  ]).then(function (res) {
+
+    connection.query(`INSERT INTO products SET ?`, {
+      item: res.item,
+      price: res.price,
+      quantity: res.quantity,
+      department_name: res.dept
+    }, function (err) {
+      if (err) throw err;
+      console.log(
+        `
+        Information added! - 
+    Item: ${res.item} 
+    Price: $${res.price} 
+    Quantity: ${res.quantity}`);
+    setTimeout(() => {
+      intialPrompt();
+    }, 2000);
+    });
+  })
 }
