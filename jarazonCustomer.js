@@ -63,11 +63,11 @@ function intialPrompt() {
   inquirer.prompt([{
     message: "What would you like to do?",
     type: "list",
-    choices: ["See what I got", "Buy my stuff", "Add an item", "I don't want this junk"],
+    choices: ["See what I got", "Buy stuff", "Add an item", "I don't want this junk"],
     name: "option"
   }]).then(function (res) {
     switch (res.option) {
-      case "Buy my stuff":
+      case "Buy stuff":
         showProducts(buy);
         break;
 
@@ -198,3 +198,4 @@ function addItem() {
     });
   })
 }
+
