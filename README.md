@@ -28,3 +28,4 @@ This allows you to be able to do 4 commands as the boss:
 * Add a new product to the inventory
 
 Here is a demo that shows that:
+https://cl.ly/340c647f15d8
